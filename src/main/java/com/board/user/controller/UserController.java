@@ -3,6 +3,7 @@ package com.board.user.controller;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.board.menus.domain.MenuVo;
 import com.board.user.domain.UserVo;
 import com.board.user.mapper.UserMapper;
 
-@Controller
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
+@Controller
 @RequestMapping("/Users")
 public class UserController {
 	
@@ -62,5 +66,67 @@ public class UserController {
 		mv.setViewName("redirect:/Users/List");
 		return mv;
 	}
+	
+	
+	// http://localhost:9090/Users/View?users_id=aa
+	@RequestMapping("/View")
+	public ModelAndView view (UserVo userVo) {
+		
+		// users_id=aa db 조회
+		HashMap<String, Object> map  = userMapper.getUser( userVo );
+		//System.out.println("vo: " +vo);
+		log.info("map: {}", map);
+		
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("vo", map);
+		mv.setViewName("users/view");
+		return mv;
+	}
+	
+	// /Users/UpdateForm?user_id = sky
+	@RequestMapping("/UpdateForm")
+	public ModelAndView updateForm(UserVo userVo) {
+		// 수정할 데이터를 조회;
+		HashMap<String, Object> map = userMapper.getUser(userVo);
+		
+		// Model에 담는다
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("vo", map);
+		
+		// 이동한다
+		mv.setViewName("users/update");
+		
+		return mv;
+	}
+	
+	// /Users/Update
+	@RequestMapping("/Update")
+	public ModelAndView update( UserVo userVo ) {
+		log.info("userVo:{}", userVo );
+		// 수정
+		
+		userMapper.updateUser( userVo );
+		
+		ModelAndView  mv = new ModelAndView ();
+		mv.addObject("userVo", userVo);
+		mv.setViewName("redirect:/Users/List");
+		return mv;
+	}
+	
+	// /User/Delete?
+		@RequestMapping("/Delete")
+		public ModelAndView delete ( UserVo userVo ) {
+			userMapper.delete( userVo );
+			
+			ModelAndView  mv = new ModelAndView ();
+			mv.addObject("userVo", userVo);
+			
+			mv.setViewName("redirect:/Users/List");
+			return mv;
+			
+		}
+		
+	
+	
 	
 }

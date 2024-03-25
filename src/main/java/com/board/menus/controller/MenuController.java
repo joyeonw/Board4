@@ -140,7 +140,8 @@ public class MenuController {
 		
 		
 		// 수정 후 조회
-		return "redirect:/Menus/List";
+		return "/menus/update";
 	}
+	
 	
 }
