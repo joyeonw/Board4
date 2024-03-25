@@ -42,7 +42,7 @@
 			</tr>
 			<tr>
 				<td colspan="5">
-					[<a href="/Menus/WriteForm">사용자추가</a>]
+					[<a href="/Users/WriteForm">사용자추가</a>]
 				
 				</td>
 			</tr>
